@@ -36,7 +36,7 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
       try {
         let taskStorage: Tasks[] | string | null = await AsyncStorage.getItem(
           'task',
-        );
+        ); // AsyncStorage will still getting the same elements from storage, no matter if the UseEffect is loaded again. This is the because of the if(route.params)
         taskStorage = taskStorage ? JSON.parse(taskStorage) : null;
         if (taskStorage) {
           let newDoneTasks: Tasks[] = [];
@@ -60,7 +60,7 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
       }
     };
     getTasks();
-  }, [route.params]);
+  }, [route.params]); //When route.params changes, useEffect executes again.
 
   const taskDoneValidation = ({item}: {item: Tasks}) => {
     if (item.taskDone === true) {
@@ -74,7 +74,8 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
     }
   };
 
-  const ButtonTitle = styled(Title)({
+  //Change Title style to be used as a text button
+  const ButtonText = styled(Title)({
     fontSize: 17,
     color: '#FFF',
     fontWeight: 'normal',
@@ -104,7 +105,7 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
           />
         </View>
         <Button onPress={() => goAddTask()} underlayColor="#1c9956">
-          <ButtonTitle>Add a task</ButtonTitle>
+          <ButtonText>Add a task</ButtonText>
         </Button>
       </MainContainer>
     </>

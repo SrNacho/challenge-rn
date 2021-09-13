@@ -6,11 +6,17 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Id generator
 import {nanoid} from 'nanoid';
+
+//Styled components
 import styled from 'styled-components';
 import {
   DropDown,
@@ -189,97 +195,104 @@ const AddForm = ({
     fontWeight: 'normal',
   });
 
+  //Closes kb when touching out
+  const closeKb = () => {
+    Keyboard.dismiss();
+  };
+
   return (
     <>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <View>
-          <ItemContainer>
-            <Titles>Title</Titles>
-            <TextInput
-              placeholder="Design team meeting"
-              onChangeText={(text: string) => saveTaskTitle(text)}
-            />
-          </ItemContainer>
-          <ItemContainer>
-            <Titles>Deadline</Titles>
-            <TimeButton onPress={() => showDatePicker()} underlayColor="">
-              <Text style={styles.timeText}>
-                {taskDeadLine !== '' ? taskDeadLine : '09/08/2021'}
-              </Text>
-            </TimeButton>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirmDate}
-              onCancel={hideDatePicker}
-            />
-          </ItemContainer>
-          <ItemContainer>
-            <View style={styles.dates}>
-              <View>
-                <Titles>Start time</Titles>
-                <TimeButton
-                  onPress={() => showStartTimePicker()}
-                  underlayColor="">
-                  <Text style={styles.timeText}>
-                    {taskStartTime !== '' ? taskStartTime : '00:00'} &#10674;
-                  </Text>
-                </TimeButton>
-                <DateTimePickerModal
-                  isVisible={isStartTimePickerVisible}
-                  mode="time"
-                  onConfirm={handleConfirmStartTime}
-                  onCancel={hideStartTimePicker}
-                  is24Hour={true}
-                />
+        <TouchableWithoutFeedback onPress={() => closeKb()}>
+          <View>
+            <ItemContainer>
+              <Titles>Title</Titles>
+              <TextInput
+                placeholder="Design team meeting"
+                onChangeText={(text: string) => saveTaskTitle(text)}
+              />
+            </ItemContainer>
+            <ItemContainer>
+              <Titles>Deadline</Titles>
+              <TimeButton onPress={() => showDatePicker()} underlayColor="">
+                <Text style={styles.timeText}>
+                  {taskDeadLine !== '' ? taskDeadLine : '09/08/2021'}
+                </Text>
+              </TimeButton>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirmDate}
+                onCancel={hideDatePicker}
+              />
+            </ItemContainer>
+            <ItemContainer>
+              <View style={styles.dates}>
+                <View>
+                  <Titles>Start time</Titles>
+                  <TimeButton
+                    onPress={() => showStartTimePicker()}
+                    underlayColor="">
+                    <Text style={styles.timeText}>
+                      {taskStartTime !== '' ? taskStartTime : '00:00'} &#10674;
+                    </Text>
+                  </TimeButton>
+                  <DateTimePickerModal
+                    isVisible={isStartTimePickerVisible}
+                    mode="time"
+                    onConfirm={handleConfirmStartTime}
+                    onCancel={hideStartTimePicker}
+                    is24Hour={true}
+                  />
+                </View>
+                <View>
+                  <Titles>End time</Titles>
+                  <TimeButton
+                    onPress={() => showEndTimePicker()}
+                    underlayColor="">
+                    <Text style={styles.timeText}>
+                      {taskEndTime !== '' ? taskEndTime : '00:00'} &#10674;
+                    </Text>
+                  </TimeButton>
+                  <DateTimePickerModal
+                    isVisible={isEndTimePickerVisible}
+                    mode="time"
+                    onConfirm={handleConfirmEndTime}
+                    onCancel={hideEndTimePicker}
+                    is24Hour={true}
+                  />
+                </View>
               </View>
-              <View>
-                <Titles>End time</Titles>
-                <TimeButton
-                  onPress={() => showEndTimePicker()}
-                  underlayColor="">
-                  <Text style={styles.timeText}>
-                    {taskEndTime !== '' ? taskEndTime : '00:00'} &#10674;
-                  </Text>
-                </TimeButton>
-                <DateTimePickerModal
-                  isVisible={isEndTimePickerVisible}
-                  mode="time"
-                  onConfirm={handleConfirmEndTime}
-                  onCancel={hideEndTimePicker}
-                  is24Hour={true}
-                />
-              </View>
-            </View>
-          </ItemContainer>
-          <Titles>Remind</Titles>
-          <ItemContainer>
-            <DropDown
-              zIndex={150000}
-              open={openRemind}
-              value={valueRemind}
-              items={itemsRemind}
-              setOpen={setOpenRemind}
-              setValue={setValueRemind}
-              setItems={setItemsRemind}
-              onOpen={onRemindOpen}
-              onChangeValue={(reminder: string) => reminderTime(reminder)}
-            />
-          </ItemContainer>
-          <ItemContainer>
-            <Titles>Repeat</Titles>
-            <DropDown
-              open={openRepeat}
-              value={valueRepeat}
-              items={itemsRepeat}
-              setOpen={setOpenRepeat}
-              setValue={setValueRepeat}
-              setItems={setItemsRepeat}
-              onOpen={onRepeatOpen}
-              onChangeValue={(reminder: string) => repeatFrecuency(reminder)}
-            />
-          </ItemContainer>
-        </View>
+            </ItemContainer>
+            <Titles>Remind</Titles>
+            <ItemContainer>
+              <DropDown
+                zIndex={150000}
+                open={openRemind}
+                value={valueRemind}
+                items={itemsRemind}
+                setOpen={setOpenRemind}
+                setValue={setValueRemind}
+                setItems={setItemsRemind}
+                onOpen={onRemindOpen}
+                onChangeValue={(reminder: string) => reminderTime(reminder)}
+              />
+            </ItemContainer>
+            <ItemContainer>
+              <Titles>Repeat</Titles>
+              <DropDown
+                open={openRepeat}
+                value={valueRepeat}
+                items={itemsRepeat}
+                setOpen={setOpenRepeat}
+                setValue={setValueRepeat}
+                setItems={setItemsRepeat}
+                onOpen={onRepeatOpen}
+                onChangeValue={(reminder: string) => repeatFrecuency(reminder)}
+              />
+            </ItemContainer>
+          </View>
+        </TouchableWithoutFeedback>
       </ScrollView>
       <Button onPress={() => validateInputs()} underlayColor="#1c9956">
         <ButtonTitle>Create a task</ButtonTitle>

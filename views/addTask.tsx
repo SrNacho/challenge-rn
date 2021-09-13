@@ -9,6 +9,7 @@ interface params {
 
 const addTask = ({route, navigation}: params) => {
   const {pendingTaskss} = route.params;
+  //Pending tasks are send by route params in string format because cannot send functions over it. Also I didn't found a way to refresh the 'doneTasks' state in the Inicio.tsx so implemented this.
   return (
     <>
       <View style={styles.contenedor}>
