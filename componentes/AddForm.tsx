@@ -202,8 +202,8 @@ const AddForm = ({
 
   return (
     <>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <TouchableWithoutFeedback onPress={() => closeKb()}>
+      <TouchableWithoutFeedback onPress={() => closeKb()}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
           <View>
             <ItemContainer>
               <Titles>Title</Titles>
@@ -292,8 +292,8 @@ const AddForm = ({
               />
             </ItemContainer>
           </View>
-        </TouchableWithoutFeedback>
-      </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
       <Button onPress={() => validateInputs()} underlayColor="#1c9956">
         <ButtonTitle>Create a task</ButtonTitle>
       </Button>
