@@ -34,26 +34,27 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
     const getTasks = async () => {
       //await AsyncStorage.removeItem('task');
       try {
-        let taskStorage: Tasks[] | string | null = await AsyncStorage.getItem(
-          'task',
-        ); // AsyncStorage will still getting the same elements from storage, no matter if the UseEffect is loaded again. This is the because of the if(route.params)
+        let taskStorage: Tasks[] | string = await AsyncStorage.getItem('task'); // AsyncStorage will still getting the same elements from storage, no matter if the UseEffect is loaded again. This is the because of the if(route.params)
         taskStorage = taskStorage ? JSON.parse(taskStorage) : null;
+        console.log(taskStorage, 'del taskstorage');
+        let newDoneTasks: Tasks[] = [];
+        let newPendingTasks: Tasks[] = [];
         if (taskStorage) {
-          let newDoneTasks: Tasks[] = [];
-          let newPendingTasks: Tasks[] = [];
           const isDone = taskStorage.map((task: Tasks) => {
             task.taskDone
               ? newDoneTasks.push(task)
               : newPendingTasks.push(task);
           });
-          if (route.params) {
-            const {pendingTaskFromForm} = route.params;
-            let pendingTaskForm = JSON.parse(pendingTaskFromForm);
-            setPendingTasks(pendingTaskForm);
-          } else {
-            setPendingTasks(newPendingTasks);
-            setDoneTasks(newDoneTasks);
-          }
+        }
+        if (route.params) {
+          console.log('here');
+          const {pendingTaskFromForm} = route.params;
+          let pendingTaskForm = JSON.parse(pendingTaskFromForm);
+          console.log(pendingTaskForm);
+          setPendingTasks(pendingTaskForm);
+        } else {
+          setPendingTasks(newPendingTasks);
+          setDoneTasks(newDoneTasks);
         }
       } catch (error) {
         console.log(error, 'Error en inicio');

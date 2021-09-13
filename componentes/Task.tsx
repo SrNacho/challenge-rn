@@ -26,6 +26,7 @@ const Task = ({taskName, setDone}: params) => {
       );
       if (taskStorage) {
         taskStorage = JSON.parse(taskStorage);
+
         let newTaskStorage: Tasks[] = [];
         const isDone = taskStorage.map((task: Tasks) => {
           if (task.taskId !== taskName.taskId) {

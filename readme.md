@@ -24,18 +24,19 @@ $ npx react-native run-app
   "@react-native-picker/picker": "^2.0.0",
   "@react-navigation/native": "^6.0.2",
   "@react-navigation/stack": "^6.0.7",
-  "nanoid": "^3.1.25",
   "react": "17.0.2",
   "react-native": "0.65.1",
   "react-native-bouncy-checkbox": "^2.1.4",
   "react-native-dropdown-picker": "^5.1.23",
   "react-native-elements": "^3.4.2",
   "react-native-gesture-handler": "^1.10.3",
+  "react-native-get-random-values": "^1.7.0",
   "react-native-modal-datetime-picker": "^11.0.0",
   "react-native-reanimated": "^2.3.0-alpha.2",
   "react-native-safe-area-context": "^3.3.2",
   "react-native-screens": "^3.6.0",
-  "styled-components": "^5.3.1"
+  "styled-components": "^5.3.1",
+  "uuid": "^8.3.2"
 }
 ```
 
