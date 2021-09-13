@@ -3,7 +3,7 @@
 ## Application Setup
 
 ```python
-#Clone this rep
+#Clone this repo
 $ git clone https://github.com/SrNacho/challenge-rn.git
 $ cd challenge-rn
 
@@ -11,7 +11,7 @@ $ cd challenge-rn
 $ npm install
 
 #Running the app
-$ npx react-native run-app
+$ npx react-native run-android
 ```
 
 ## Dependencies used
