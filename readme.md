@@ -24,6 +24,7 @@ $ npx react-native run-android
   "@react-native-picker/picker": "^2.0.0",
   "@react-navigation/native": "^6.0.2",
   "@react-navigation/stack": "^6.0.7",
+  "patch-package": "^6.4.7",
   "react": "17.0.2",
   "react-native": "0.65.1",
   "react-native-bouncy-checkbox": "^2.1.4",
