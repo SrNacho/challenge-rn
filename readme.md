@@ -13,6 +13,7 @@ $ npm install
 #Running the app
 $ npx react-native run-android
 ```
+[Instalation on Windows/Android and showcase](https://youtu.be/2cYZFeXrkT0)
 
 ## Dependencies used
 
