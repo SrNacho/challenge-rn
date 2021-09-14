@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {Text} from 'react-native';
+import React from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 interface Tasks {
@@ -12,7 +11,7 @@ interface Tasks {
   taskStartTime: string;
   taskTitle: string;
 }
-const TaskDone = ({task}: {task: Tasks}) => {
+const DoneTaskCheckbox = ({task}: {task: Tasks}) => {
   return (
     <>
       <BouncyCheckbox
@@ -31,4 +30,4 @@ const TaskDone = ({task}: {task: Tasks}) => {
   );
 };
 
-export default TaskDone;
+export default DoneTaskCheckbox;

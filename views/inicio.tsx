@@ -3,8 +3,8 @@ import {FlatList, View} from 'react-native';
 import {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //Components
-import Task from '../componentes/Task';
-import TaskDone from '../componentes/TaskDone';
+import UndoneTaskCheckbox from '../componentes/UndoneTaskCheckbox';
+import DoneTaskCheckbox from '../componentes/DoneTaskCheckbox';
 //Styles
 import styled from 'styled-components';
 import {MainContainer, Button, Title} from '../styles/index';
@@ -26,7 +26,7 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
 
   const goAddTask = () => {
     navigation.navigate('addTask', {
-      pendingTaskss: JSON.stringify(pendingTasks),
+      pendingTasksFromState: JSON.stringify(pendingTasks),
     });
   };
 
@@ -65,13 +65,13 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
 
   const taskDoneValidation = ({item}: {item: Tasks}) => {
     if (item.taskDone === true) {
-      return <TaskDone task={item} />;
+      return <DoneTaskCheckbox task={item} />;
     }
   };
 
   const pendingTask = ({item}: {item: Tasks}) => {
     if (item.taskDone === false) {
-      return <Task taskName={item} setDone={setDoneTasks} />;
+      return <UndoneTaskCheckbox taskName={item} setDone={setDoneTasks} />;
     }
   };
 

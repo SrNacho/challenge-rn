@@ -15,10 +15,10 @@ interface Tasks {
 
 interface params {
   taskName: Tasks;
-  setDone?: (obj: Tasks[]) => void;
+  setDone: (obj: Tasks[]) => void;
 }
 
-const Task = ({taskName, setDone}: params) => {
+const UndoneTaskCheckbox = ({taskName, setDone}: params) => {
   const addDoneTask = async () => {
     try {
       let taskStorage: string | Tasks[] | null = await AsyncStorage.getItem(
@@ -62,4 +62,4 @@ const Task = ({taskName, setDone}: params) => {
   );
 };
 
-export default Task;
+export default UndoneTaskCheckbox;
