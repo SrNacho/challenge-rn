@@ -14,6 +14,7 @@ $ npm install
 $ npx react-native run-android
 ```
 [Instalation on Windows/Android and showcase](https://youtu.be/2cYZFeXrkT0)
+[iOS showcase](https://youtu.be/DIW0o6FpQjA)
 
 ## Dependencies used
 
