@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -255,9 +256,9 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
           </View>
         </ItemContainer>
         <Titles>Remind</Titles>
-        <ItemContainer>
+        <ItemContainer {...(Platform.OS === 'ios' ? {zIndex: 10} : {})}>
           <DropDown
-            zIndex={150000}
+            zIndex={15000}
             open={openRemind}
             value={valueRemind}
             items={itemsRemind}
