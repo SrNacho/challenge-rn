@@ -1,7 +1,7 @@
 # Challenge
 
-## Application Setup
-
+## Application Setup (Windows/iOS)
+#### Windows
 ```python
 #Clone this repo
 $ git clone https://github.com/SrNacho/challenge-rn.git
@@ -13,7 +13,23 @@ $ npm install
 #Running the app
 $ npx react-native run-android
 ```
-[Instalation on Windows/Android and showcase](https://youtu.be/2cYZFeXrkT0)
+#### iOS
+```python
+#Clone this repo
+$ git clone https://github.com/SrNacho/challenge-rn.git
+$ cd challenge-rn
+$ cd ios
+$ pod install
+
+#Download dependencies
+$ npm install
+
+#Running the app
+$ npx react-native run-ios
+```
+**For more information about install, check the [React Native installing documentation](https://reactnative.dev/docs/environment-setup)
+
+[Instalation on Windows/Android and showcase](https://youtu.be/2cYZFeXrkT0) <br>
 [iOS showcase](https://youtu.be/DIW0o6FpQjA)
 
 ## Dependencies used
