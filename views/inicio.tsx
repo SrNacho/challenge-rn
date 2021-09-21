@@ -8,21 +8,11 @@ import DoneTaskCheckbox from '../componentes/DoneTaskCheckbox';
 //Styles
 import styled from 'styled-components';
 import {MainContainer, Button, Title} from '../styles/index';
-
-interface Tasks {
-  taskDeadLine: string;
-  taskDone: boolean;
-  taskEndTime: string;
-  taskId: string;
-  taskReminder: string;
-  taskRepeat: string;
-  taskStartTime: string;
-  taskTitle: string;
-}
+import { TaskInterface } from '../interfaces/index';
 
 const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
-  const [pendingTasks, setPendingTasks] = useState<Tasks[]>();
-  const [doneTasks, setDoneTasks] = useState<Tasks[]>();
+  const [pendingTasks, setPendingTasks] = useState<TaskInterface[]>();
+  const [doneTasks, setDoneTasks] = useState<TaskInterface[]>();
 
   const goAddTask = () => {
     navigation.navigate('addTask', {
@@ -34,13 +24,13 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
     const getTasks = async () => {
       //await AsyncStorage.removeItem('task');
       try {
-        let taskStorage: Tasks[] | string = await AsyncStorage.getItem('task'); // AsyncStorage will still getting the same elements from storage, no matter if the UseEffect is loaded again. This is the because of the if(route.params)
-        taskStorage = taskStorage ? JSON.parse(taskStorage) : null;
+        let taskStorage: string| TaskInterface[] | null = await AsyncStorage.getItem('task'); // AsyncStorage will still getting the same elements from storage, no matter if the UseEffect is loaded again. This is the because of the if(route.params)
+        taskStorage? taskStorage = JSON.parse(taskStorage) : null;
         console.log(taskStorage, 'del taskstorage');
-        let newDoneTasks: Tasks[] = [];
-        let newPendingTasks: Tasks[] = [];
+        let newDoneTasks: TaskInterface[] = [];
+        let newPendingTasks: TaskInterface[] = [];
         if (taskStorage) {
-          const isDone = taskStorage.map((task: Tasks) => {
+          const isDone = taskStorage.map((task: TaskInterface) => {
             task.taskDone
               ? newDoneTasks.push(task)
               : newPendingTasks.push(task);
@@ -63,13 +53,13 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
     getTasks();
   }, [route.params]); //When route.params changes, useEffect executes again.
 
-  const taskDoneValidation = ({item}: {item: Tasks}) => {
+  const taskDoneValidation = ({item}: {item: TaskInterface}) => {
     if (item.taskDone === true) {
       return <DoneTaskCheckbox task={item} />;
     }
   };
 
-  const pendingTask = ({item}: {item: Tasks}) => {
+  const pendingTask = ({item}: {item: TaskInterface}) => {
     if (item.taskDone === false) {
       return <UndoneTaskCheckbox taskName={item} setDone={setDoneTasks} />;
     }
@@ -90,7 +80,6 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
           <FlatList
             style={{flex: 1}}
             nestedScrollEnabled
-            extraData={doneTasks}
             data={doneTasks}
             renderItem={taskDoneValidation}
             keyExtractor={tasks => tasks.taskId}
@@ -99,7 +88,6 @@ const Inicio = ({route, navigation}: {route: object; navigation: object}) => {
           <FlatList
             style={{flex: 1}}
             nestedScrollEnabled
-            extraData={pendingTasks}
             data={pendingTasks}
             renderItem={pendingTask}
             keyExtractor={tasks => tasks.taskId}

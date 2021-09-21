@@ -12,20 +12,16 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+//Task object interface
+import { TaskInterface } from '../interfaces/index';
+
 //Id generator
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 
 //Styled components
 import styled from 'styled-components';
-import {
-  DropDown,
-  ItemContainer,
-  Title,
-  TimeButton,
-  Button,
-  MainContainer,
-} from '../styles/index';
+import {DropDown,ItemContainer,Title,TimeButton,Button,MainContainer} from '../styles/index';
 
 const addTask = ({route, navigation}: {route: object; navigation: object}) => {
   const {pendingTasksFromState} = route.params;
@@ -124,12 +120,12 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
   };
 
   //Save task in storage
-  const saveTaks = async (tasks: object) => {
+  const saveTaks = async (tasks: TaskInterface) => {
     try {
-      let taskStorage: string | null | object[] = await AsyncStorage.getItem(
+      let taskStorage: string | null | TaskInterface[] = await AsyncStorage.getItem(
         'task',
       );
-      taskStorage = JSON.parse(taskStorage);
+      taskStorage? taskStorage =JSON.parse(taskStorage):null;
       if (Array.isArray(taskStorage)) {
         const newTask = [tasks, ...taskStorage];
         console.log('añado + de 1');
@@ -156,7 +152,7 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
     ) {
       Alert.alert('Falta completar campos');
     } else {
-      const newTask: object = {
+      const newTask: TaskInterface = {
         taskTitle,
         taskDeadLine,
         taskStartTime,
@@ -180,7 +176,7 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
   };
 
   //Transports you to the main page, sending the task created through route params then stores it into the state
-  const goMainPage = (pendingTask: object) => {
+  const goMainPage = (pendingTask: object[]) => {
     console.log(pendingTask, 'del go mainpage');
     navigation.navigate('Inicio', {
       pendingTaskFromForm: JSON.stringify(pendingTask),

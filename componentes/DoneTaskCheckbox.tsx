@@ -1,17 +1,8 @@
 import React from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { TaskInterface } from '../interfaces/index';
 
-interface Tasks {
-  taskDeadLine: string;
-  taskDone: boolean;
-  taskEndTime: string;
-  taskId: string;
-  taskReminder: string;
-  taskRepeat: string;
-  taskStartTime: string;
-  taskTitle: string;
-}
-const DoneTaskCheckbox = ({task}: {task: Tasks}) => {
+const DoneTaskCheckbox = ({task}: {task: TaskInterface}) => {
   return (
     <>
       <BouncyCheckbox

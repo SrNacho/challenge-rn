@@ -1,34 +1,25 @@
 import React from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TaskInterface } from '../interfaces/index';
 
-interface Tasks {
-  taskDeadLine: string;
-  taskDone: boolean;
-  taskEndTime: string;
-  taskId: string;
-  taskReminder: string;
-  taskRepeat: string;
-  taskStartTime: string;
-  taskTitle: string;
-}
 
 interface params {
-  taskName: Tasks;
-  setDone: (obj: Tasks[]) => void;
+  taskName: TaskInterface;
+  setDone: (obj: TaskInterface[]) => void;
 }
 
 const UndoneTaskCheckbox = ({taskName, setDone}: params) => {
   const addDoneTask = async () => {
     try {
-      let taskStorage: string | Tasks[] | null = await AsyncStorage.getItem(
+      let taskStorage: string | TaskInterface[] | null = await AsyncStorage.getItem(
         'task',
       );
       if (taskStorage) {
         taskStorage = JSON.parse(taskStorage);
 
-        let newTaskStorage: Tasks[] = [];
-        const isDone = taskStorage.map((task: Tasks) => {
+        let newTaskStorage: TaskInterface[] = [];
+        const isDone = taskStorage.map((task: TaskInterface) => {
           if (task.taskId !== taskName.taskId) {
             newTaskStorage.push(task);
           }

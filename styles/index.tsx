@@ -5,11 +5,9 @@ import MainContainer from './MainContainer';
 import TimeButton from './TimeButtons';
 import Title from './Title';
 
-module.exports = {
-  Button,
+export {Button,
   DropDown,
   ItemContainer,
   MainContainer,
   TimeButton,
-  Title,
-};
+  Title,};
