@@ -1,56 +1,52 @@
 import React, {useCallback, useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  ScrollView,
-  Alert,
-  Platform,
-} from 'react-native';
+import {Text, View, TextInput, ScrollView, Alert, Platform} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-//Task object interface
-import { TaskInterface } from '../interfaces/index';
-
-//Id generator
 import 'react-native-get-random-values';
-import {v4 as uuidv4} from 'uuid';
-
-//Styled components
 import styled from 'styled-components';
-import {DropDown,ItemContainer,Title,TimeButton,Button,MainContainer} from '../styles/index';
+import {
+  styles,
+  DropDown,
+  ItemContainer,
+  Title,
+  TimeButton,
+  Button,
+  MainContainer,
+  MainContainerChild,
+  DatesContainer,
+  LabelTimeButton,
+  NavigatorSeparator,
+} from './styles';
+import {TaskInterface} from '../interfaces/index';
+import {v4 as uuidv4} from 'uuid';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faClock} from '@fortawesome/free-regular-svg-icons';
 
 const addTask = ({route, navigation}: {route: object; navigation: object}) => {
-  const {pendingTasksFromState} = route.params;
-  //Dropdown states
-  const [openRemind, setOpenRemind] = useState(false);
-  const [valueRemind, setValueRemind] = useState(null);
-  const [itemsRemind, setItemsRemind] = useState([
+  const remindFrecuency = [
     {label: '5 minutes early', value: '5'},
     {label: '10 minutes early', value: '10'},
     {label: '30 minutes early', value: '30'},
-  ]);
-  const [openRepeat, setOpenRepeat] = useState(false);
-  const [valueRepeat, setValueRepeat] = useState(null);
-  const [itemsRepeat, setItemsRepeat] = useState([
+  ];
+
+  const repeatFrecuency = [
     {label: 'Daily', value: 'daily'},
     {label: 'Weekly', value: 'weekly'},
     {label: 'Monthly', value: 'monthly'},
-  ]);
+  ];
 
-  //Prevents except 'VirtualizedLists should never be nested inside plain ScrollViews'
-  DropDownPicker.setListMode('SCROLLVIEW');
-
-  //Date picker states
+  const {pendingTasksFromState} = route.params;
+  const [openRemind, setOpenRemind] = useState(false);
+  const [valueRemind, setValueRemind] = useState(null);
+  const [itemsRemind, setItemsRemind] = useState(remindFrecuency);
+  const [openRepeat, setOpenRepeat] = useState(false);
+  const [valueRepeat, setValueRepeat] = useState(null);
+  const [itemsRepeat, setItemsRepeat] = useState(repeatFrecuency);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] =
     useState(false);
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
-
-  //Input states wich will be saved
   const [taskTitle, saveTaskTitle] = useState('');
   const [taskDeadLine, saveTaskDeadLine] = useState('');
   const [taskStartTime, saveTaskStartTime] = useState('');
@@ -58,7 +54,9 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
   const [taskReminder, saveTaskReminder] = useState('');
   const [taskRepeat, saveTaskRepeat] = useState('');
 
-  //Deadline picker
+  //Prevents except 'VirtualizedLists should never be nested inside plain ScrollViews'
+  DropDownPicker.setListMode('SCROLLVIEW');
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -68,11 +66,10 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
   };
 
   const handleConfirmDate = (date: Date) => {
-    saveTaskDeadLine(date.toLocaleDateString('es-ES'));
+    saveTaskDeadLine(date.toLocaleDateString('es-ES').replaceAll('/', '-'));
     hideDatePicker();
   };
 
-  //Start time picker
   const showStartTimePicker = () => {
     setStartTimePickerVisibility(true);
   };
@@ -87,7 +84,6 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
     hideStartTimePicker();
   };
 
-  //End time picker
   const showEndTimePicker = () => {
     setEndTimePickerVisibility(true);
   };
@@ -102,7 +98,6 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
     hideEndTimePicker();
   };
 
-  //Functions that close other pickers
   const onRemindOpen = useCallback(() => {
     setOpenRepeat(false);
   }, []);
@@ -111,36 +106,31 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
     setOpenRemind(false);
   }, []);
 
-  const reminderTime = (reminder: string) => {
+  const saveRemindTime = (reminder: string) => {
     saveTaskReminder(reminder);
   };
 
-  const repeatFrecuency = (reminder: string) => {
+  const saveRepeatFrecuency = (reminder: string) => {
     saveTaskRepeat(reminder);
   };
 
-  //Save task in storage
   const saveTaks = async (tasks: TaskInterface) => {
     try {
-      let taskStorage: string | null | TaskInterface[] = await AsyncStorage.getItem(
-        'task',
-      );
-      taskStorage? taskStorage =JSON.parse(taskStorage):null;
+      let taskStorage: string | null | TaskInterface[] =
+        await AsyncStorage.getItem('task');
+      taskStorage ? (taskStorage = JSON.parse(taskStorage)) : null;
       if (Array.isArray(taskStorage)) {
         const newTask = [tasks, ...taskStorage];
-        console.log('añado + de 1');
         await AsyncStorage.setItem('task', JSON.stringify(newTask));
       } else {
-        console.log('menos');
         const taskStr = [tasks];
         await AsyncStorage.setItem('task', JSON.stringify(taskStr));
       }
     } catch (error) {
-      console.log(error, 'no paso el if');
+      console.log(error);
     }
   };
 
-  //Function that validate user inputs (only if they're not blank)
   const validateInputs = () => {
     if (
       taskTitle.trim() == '' ||
@@ -150,7 +140,7 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
       taskReminder.trim() == '' ||
       taskRepeat.trim() == ''
     ) {
-      Alert.alert('Falta completar campos');
+      Alert.alert('Missing fields');
     } else {
       const newTask: TaskInterface = {
         taskTitle,
@@ -177,14 +167,12 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
 
   //Transports you to the main page, sending the task created through route params then stores it into the state
   const goMainPage = (pendingTask: object[]) => {
-    console.log(pendingTask, 'del go mainpage');
-    navigation.navigate('Inicio', {
+    navigation.navigate('mainpage', {
       pendingTaskFromForm: JSON.stringify(pendingTask),
     });
   };
 
-  //Extending styles
-  const Titles = styled(Title)({fontSize: 17});
+  const Titles = styled(Title)({fontSize: 18});
   const ButtonTitle = styled(Title)({
     fontSize: 17,
     color: '#FFF',
@@ -193,111 +181,117 @@ const addTask = ({route, navigation}: {route: object; navigation: object}) => {
 
   return (
     <MainContainer>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <ItemContainer>
-          <Titles>Title</Titles>
-          <TextInput
-            placeholder="Design team meeting"
-            onChangeText={(text: string) => saveTaskTitle(text)}
-          />
-        </ItemContainer>
-        <ItemContainer>
-          <Titles>Deadline</Titles>
-          <TimeButton onPress={() => showDatePicker()} underlayColor="">
-            <Text style={styles.timeText}>
-              {taskDeadLine !== '' ? taskDeadLine : '09/08/2021'}
-            </Text>
-          </TimeButton>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirmDate}
-            onCancel={hideDatePicker}
-          />
-        </ItemContainer>
-        <ItemContainer>
-          <View style={styles.dates}>
-            <View>
-              <Titles>Start time</Titles>
-              <TimeButton
-                onPress={() => showStartTimePicker()}
-                underlayColor="">
-                <Text style={styles.timeText}>
-                  {taskStartTime !== '' ? taskStartTime : '00:00'} &#10674;
-                </Text>
-              </TimeButton>
-              <DateTimePickerModal
-                isVisible={isStartTimePickerVisible}
-                mode="time"
-                onConfirm={handleConfirmStartTime}
-                onCancel={hideStartTimePicker}
-                is24Hour={true}
-              />
-            </View>
-            <View>
-              <Titles>End time</Titles>
-              <TimeButton onPress={() => showEndTimePicker()} underlayColor="">
-                <Text style={styles.timeText}>
-                  {taskEndTime !== '' ? taskEndTime : '00:00'} &#10674;
-                </Text>
-              </TimeButton>
-              <DateTimePickerModal
-                isVisible={isEndTimePickerVisible}
-                mode="time"
-                onConfirm={handleConfirmEndTime}
-                onCancel={hideEndTimePicker}
-                is24Hour={true}
-              />
-            </View>
-          </View>
-        </ItemContainer>
-        <Titles>Remind</Titles>
-        <ItemContainer {...(Platform.OS === 'ios' ? {zIndex: 10} : {})}>
-          <DropDown
-            zIndex={15000}
-            open={openRemind}
-            value={valueRemind}
-            items={itemsRemind}
-            setOpen={setOpenRemind}
-            setValue={setValueRemind}
-            setItems={setItemsRemind}
-            onOpen={onRemindOpen}
-            onChangeValue={(reminder: string) => reminderTime(reminder)}
-          />
-        </ItemContainer>
-        <ItemContainer>
-          <Titles>Repeat</Titles>
-          <DropDown
-            open={openRepeat}
-            value={valueRepeat}
-            items={itemsRepeat}
-            setOpen={setOpenRepeat}
-            setValue={setValueRepeat}
-            setItems={setItemsRepeat}
-            onOpen={onRepeatOpen}
-            onChangeValue={(reminder: string) => repeatFrecuency(reminder)}
-          />
-        </ItemContainer>
-      </ScrollView>
+      <NavigatorSeparator />
+      <MainContainerChild>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <ItemContainer>
+            <Titles>Title</Titles>
+            <TextInput
+              placeholder="Design team meeting"
+              onChangeText={(text: string) => saveTaskTitle(text)}
+              style={styles.timeText}
+            />
+          </ItemContainer>
+          <ItemContainer>
+            <Titles>Deadline</Titles>
+            <TimeButton onPress={() => showDatePicker()} underlayColor="">
+              <Text style={styles.timeText}>
+                {taskDeadLine !== '' ? taskDeadLine : '09-08-2021'}
+              </Text>
+            </TimeButton>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmDate}
+              onCancel={hideDatePicker}
+            />
+          </ItemContainer>
+          <ItemContainer>
+            <DatesContainer>
+              <View style={styles.timeButtonItems}>
+                <Titles>Start time</Titles>
+                <TimeButton
+                  onPress={() => showStartTimePicker()}
+                  underlayColor="">
+                  <LabelTimeButton>
+                    <Text style={styles.timeText}>
+                      {taskStartTime !== '' ? taskStartTime : '00:00'}
+                    </Text>
+                    <View style={styles.icons}>
+                      <FontAwesomeIcon icon={faClock} style={styles.icons} />
+                    </View>
+                  </LabelTimeButton>
+                </TimeButton>
+                <DateTimePickerModal
+                  isVisible={isStartTimePickerVisible}
+                  mode="time"
+                  onConfirm={handleConfirmStartTime}
+                  onCancel={hideStartTimePicker}
+                  is24Hour={true}
+                />
+              </View>
+              <View style={styles.timeButtonItems}>
+                <Titles>End time</Titles>
+                <TimeButton
+                  onPress={() => showEndTimePicker()}
+                  underlayColor="">
+                  <LabelTimeButton>
+                    <Text style={styles.timeText}>
+                      {taskEndTime !== '' ? taskEndTime : '00:00'}
+                    </Text>
+                    <View style={styles.icons}>
+                      <FontAwesomeIcon icon={faClock} style={styles.icons} />
+                    </View>
+                  </LabelTimeButton>
+                </TimeButton>
+                <DateTimePickerModal
+                  isVisible={isEndTimePickerVisible}
+                  mode="time"
+                  onConfirm={handleConfirmEndTime}
+                  onCancel={hideEndTimePicker}
+                  is24Hour={true}
+                />
+              </View>
+            </DatesContainer>
+          </ItemContainer>
+          <Titles>Remind</Titles>
+          <ItemContainer {...(Platform.OS === 'ios' ? {zIndex: 10} : {})}>
+            <DropDown
+              placeholderStyle={styles.placeHolderStyle}
+              zIndex={5500}
+              open={openRemind}
+              value={valueRemind}
+              items={itemsRemind}
+              setOpen={setOpenRemind}
+              setValue={setValueRemind}
+              setItems={setItemsRemind}
+              onOpen={onRemindOpen}
+              onChangeValue={(reminder: string) => saveRemindTime(reminder)}
+            />
+          </ItemContainer>
+          <ItemContainer>
+            <Titles>Repeat</Titles>
+            <DropDown
+              placeholderStyle={styles.placeHolderStyle}
+              open={openRepeat}
+              value={valueRepeat}
+              items={itemsRepeat}
+              setOpen={setOpenRepeat}
+              setValue={setValueRepeat}
+              setItems={setItemsRepeat}
+              onOpen={onRepeatOpen}
+              onChangeValue={(reminder: string) =>
+                saveRepeatFrecuency(reminder)
+              }
+            />
+          </ItemContainer>
+        </ScrollView>
+      </MainContainerChild>
       <Button onPress={() => validateInputs()} underlayColor="#1c9956">
         <ButtonTitle>Create a task</ButtonTitle>
       </Button>
     </MainContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  dates: {
-    flexDirection: 'row',
-  },
-  timeText: {
-    fontSize: 16,
-    letterSpacing: 0.25,
-    color: '#a8a8a8',
-    textTransform: 'uppercase',
-    textAlign: 'left',
-    width: '100%',
-  },
-});
 
 export default addTask;

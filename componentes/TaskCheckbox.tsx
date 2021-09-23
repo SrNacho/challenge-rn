@@ -1,23 +1,22 @@
 import React from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TaskInterface } from '../interfaces/index';
+import {TaskInterface} from '../interfaces/index';
+import {styles} from './styles';
 
-
-interface params {
+interface Props {
   taskName: TaskInterface;
-  setDone: (obj: TaskInterface[]) => void;
+  bouncyProps?: object;
+  setDone?: (obj: TaskInterface[]) => void;
 }
 
-const UndoneTaskCheckbox = ({taskName, setDone}: params) => {
+const TaskCheckbox = ({taskName, setDone = () => null}: Props) => {
   const addDoneTask = async () => {
     try {
-      let taskStorage: string | TaskInterface[] | null = await AsyncStorage.getItem(
-        'task',
-      );
+      let taskStorage: string | TaskInterface[] | null =
+        await AsyncStorage.getItem('task');
       if (taskStorage) {
         taskStorage = JSON.parse(taskStorage);
-
         let newTaskStorage: TaskInterface[] = [];
         const isDone = taskStorage.map((task: TaskInterface) => {
           if (task.taskId !== taskName.taskId) {
@@ -27,8 +26,6 @@ const UndoneTaskCheckbox = ({taskName, setDone}: params) => {
         taskName['taskDone'] = true;
         const newTask = [taskName, ...newTaskStorage];
         setDone(newTask);
-        console.log(newTask);
-        //console.log(newTask, typeof newTask);
         await AsyncStorage.setItem('task', JSON.stringify(newTask));
       }
     } catch (error) {
@@ -36,21 +33,21 @@ const UndoneTaskCheckbox = ({taskName, setDone}: params) => {
     }
   };
   return (
-    <>
-      <BouncyCheckbox
-        style={{marginTop: 10}}
-        size={25}
-        textStyle={{textDecorationLine: 'none'}}
-        fillColor="#93CCEA"
-        unfillColor="#FFFFFF"
-        text={taskName.taskTitle}
-        iconStyle={{borderColor: 'blue', borderRadius: 10}}
-        onPress={() => {
-          addDoneTask();
-        }}
-      />
-    </>
+    <BouncyCheckbox
+      disabled={taskName.taskDone ? true : false}
+      isChecked={taskName.taskDone ? true : false}
+      style={styles.checkBox}
+      size={25}
+      textStyle={styles.text}
+      fillColor="#FC5146"
+      unfillColor="#FFFFFF"
+      text={taskName.taskTitle}
+      iconStyle={
+        taskName.taskDone ? styles.iconStyleDone : styles.iconStyleUndone
+      }
+      onPress={addDoneTask}
+    />
   );
 };
 
-export default UndoneTaskCheckbox;
+export default TaskCheckbox;

@@ -1,7 +1,7 @@
 # Challenge
 
-## Application Setup (Windows/iOS)
-#### Windows
+## Application Setup
+
 ```python
 #Clone this repo
 $ git clone https://github.com/SrNacho/challenge-rn.git
@@ -13,29 +13,21 @@ $ npm install
 #Running the app
 $ npx react-native run-android
 ```
-#### iOS
-```python
-#Clone this repo
-$ git clone https://github.com/SrNacho/challenge-rn.git
-$ cd challenge-rn
-$ cd ios
-$ pod install
 
-#Download dependencies
-$ npm install
+\*\*For more information about install, check the [React Native installing documentation](https://reactnative.dev/docs/environment-setup)
 
-#Running the app
-$ npx react-native run-ios
-```
-**For more information about install, check the [React Native installing documentation](https://reactnative.dev/docs/environment-setup)
-
-[Instalation on Windows/Android and showcase](https://youtu.be/2cYZFeXrkT0) <br>
+[Android showcase](https://youtu.be/2cYZFeXrkT0) <br>
 [iOS showcase](https://youtu.be/DIW0o6FpQjA)
 
 ## Dependencies used
 
 ```json
 {
+  "@fortawesome/fontawesome-svg-core": "^1.2.36",
+  "@fortawesome/free-brands-svg-icons": "^5.15.4",
+  "@fortawesome/free-regular-svg-icons": "^5.15.4",
+  "@fortawesome/free-solid-svg-icons": "^5.15.4",
+  "@fortawesome/react-native-fontawesome": "^0.2.7",
   "@react-native-async-storage/async-storage": "^1.15.7",
   "@react-native-community/datetimepicker": "^3.5.2",
   "@react-native-community/masked-view": "^0.1.11",
@@ -54,6 +46,7 @@ $ npx react-native run-ios
   "react-native-reanimated": "^2.3.0-alpha.2",
   "react-native-safe-area-context": "^3.3.2",
   "react-native-screens": "^3.6.0",
+  "react-native-svg": "^12.1.1",
   "styled-components": "^5.3.1",
   "uuid": "^8.3.2"
 }
